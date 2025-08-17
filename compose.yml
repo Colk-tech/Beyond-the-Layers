@@ -1,0 +1,21 @@
+---
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    command: ["/bin/server", "--listen=:50051"]
+    ports:
+      - "50051:50051"
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    command: ["/bin/client", "-addr", "server:50051", "-path", "/"]
+    depends_on:
+      - server
+    restart: "no"
