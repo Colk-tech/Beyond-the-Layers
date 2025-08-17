@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package sysrpc.v1;
+option go_package = "github.com/Colk-tech/Beyond-the-Layers/gen/v1;v1";
+
+service SysFS {
+  // follow_symlink=false のとき Lstat 相当 ( デフォルトで推奨 )
+  rpc Stat(StatRequest) returns (StatResponse);
+}
+
+message StatRequest {
+  string path = 1;
+  bool follow_symlink = 2;
+}
+
+enum FileType {
+  FILE_TYPE_UNSPECIFIED = 0;
+  FILE = 1;
+  DIR = 2;
+  SYMLINK = 3;
+  OTHER = 4;
+}
+
+message StatResponse {
+  int64 size = 1;
+  uint32 mode = 2;
+  uint32 uid = 3;
+  uint32 gid = 4;
+  int64 mtime_sec = 5;
+  int64 mtime_nsec = 6;
+  FileType type = 7;
+}
